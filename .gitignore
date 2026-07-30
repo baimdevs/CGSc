@@ -1,0 +1,11 @@
+.cache/
+.config/
+.gemini/
+.local/
+.vnc/
+.ssh/
+.bash_history
+.bashrc
+.profile
+.screenrc
+.Xauthority

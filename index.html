@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>baimstore - Direktori Video Edukasi YouTube</title>
+    <meta name="description" content="Platform direktori video edukasi YouTube interaktif dengan fitur auto-fetch oEmbed, filter kategori, pencarian, dan pelacakan status belajar.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN for Crisp Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <!-- Header Nav -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>baim<span>store</span></h1>
+                    <span class="badge">EduDirectory</span>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button id="btnOpenAddModal" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Tambah Video</span>
+                </button>
+                <button id="themeToggleBtn" class="btn-icon" title="Ganti Tema">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-container">
+        <!-- Hero / Stats Tracker Banner -->
+        <section class="dashboard-hero">
+            <div class="hero-content">
+                <h2>Kelola & Pelajari Video Edukasi Terbaik</h2>
+                <p>Simpan, kategorikan, dan pantau kemajuan belajar video YouTube edukasi Anda secara terorganisir.</p>
+                
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <span class="progress-title"><i class="fa-solid fa-chart-line"></i> Progres Belajar</span>
+                        <span id="progressPercent" class="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="progressBarFill" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span><strong id="statCompleted">0</strong> dari <strong id="statTotal">0</strong> Video Selesai</span>
+                        <span><i class="fa-solid fa-clock"></i> Simpan Permanen (LocalStorage)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Directory Controls & Filters -->
+        <section class="controls-section">
+            <div class="search-bar-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Cari judul video, topik, atau catatan... (Tekan '/' untuk fokus)" autocomplete="off">
+                <button id="btnClearSearch" class="btn-clear-search hidden" title="Hapus Pencarian">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="filter-toolbar">
+                <div class="category-pills" id="categoryPills">
+                    <button class="pill active" data-category="all">Semua Materi</button>
+                    <button class="pill" data-category="Pemrograman">💻 Pemrograman</button>
+                    <button class="pill" data-category="Matematika & Sains">📐 Sains & Math</button>
+                    <button class="pill" data-category="Bahasa">🇬🇧 Bahasa</button>
+                    <button class="pill" data-category="Desain & Kreatif">🎨 Desain</button>
+                    <button class="pill" data-category="Bisnis & Karir">💼 Bisnis</button>
+                    <button class="pill" data-category="Pengembangan Diri">🧠 Self Dev</button>
+                    <button class="pill pill-status" data-filter="uncompleted">⏳ Belum Selesai</button>
+                    <button class="pill pill-status" data-filter="completed">✅ Selesai</button>
+                </div>
+
+                <div class="toolbar-actions">
+                    <div class="select-wrapper">
+                        <select id="sortSelect">
+                            <option value="newest">Terbaru Ditambahkan</option>
+                            <option value="oldest">Terlama Ditambahkan</option>
+                            <option value="title-asc">Judul (A - Z)</option>
+                            <option value="title-desc">Judul (Z - A)</option>
+                            <option value="status">Status Belum Selesai First</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-icon"></i>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button id="btnGridView" class="btn-view active" title="Tampilan Grid">
+                            <i class="fa-solid fa-grip"></i>
+                        </button>
+                        <button id="btnListView" class="btn-view" title="Tampilan List">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Directory Grid / List -->
+        <section class="directory-section">
+            <div id="videoContainer" class="video-grid">
+                <!-- Dynamically Rendered Video Cards -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">
+                    <i class="fa-solid fa-photo-film"></i>
+                </div>
+                <h3>Tidak ada video ditemukan</h3>
+                <p>Coba kata kunci lain atau tambahkan video edukasi baru ke direktori Anda.</p>
+                <button id="btnResetFilters" class="btn btn-secondary">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Filter
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Form Tambah Video -->
+    <div id="addModal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-brands fa-youtube modal-icon"></i>
+                    <h3>Tambah Video Edukasi Baru</h3>
+                </div>
+                <button class="btn-close-modal" id="btnCloseAddModal">&times;</button>
+            </div>
+            
+            <form id="addVideoForm" class="modal-body">
+                <div class="form-group">
+                    <label for="ytUrl">Link Video YouTube <span class="required">*</span></label>
+                    <div class="url-input-wrapper">
+                        <input type="url" id="ytUrl" placeholder="https://www.youtube.com/watch?v=..." required autocomplete="off">
+                        <button type="button" id="btnFetchMetadata" class="btn btn-outline">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Ambil Info</span>
+                        </button>
+                    </div>
+                    <small class="form-hint">Mendukung link YouTube standar, Shorts, atau embed url (Menggunakan oEmbed API tanpa API Key).</small>
+                </div>
+
+                <!-- Preview Container -->
+                <div id="oembedPreview" class="oembed-preview-card hidden">
+                    <div class="preview-thumb">
+                        <img id="previewImg" src="" alt="Thumbnail Preview">
+                        <span class="preview-badge"><i class="fa-brands fa-youtube"></i> Auto Fetch</span>
+                    </div>
+                    <div class="preview-info">
+                        <h4 id="previewTitle">Judul Video YouTube...</h4>
+                        <p id="previewAuthor" class="author-name"><i class="fa-regular fa-circle-user"></i> Channel Name</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoTitle">Judul Video <span class="required">*</span></label>
+                    <input type="text" id="videoTitle" placeholder="Judul akan otomatis terisi atau dapat diketik manual" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="videoCategory">Kategori Materi <span class="required">*</span></label>
+                        <select id="videoCategory" required>
+                            <option value="Pemrograman">💻 Pemrograman & Tech</option>
+                            <option value="Matematika & Sains">📐 Matematika & Sains</option>
+                            <option value="Bahasa">🇬🇧 Bahasa & Komunikasi</option>
+                            <option value="Desain & Kreatif">🎨 Desain & Kreatif</option>
+                            <option value="Bisnis & Karir">💼 Bisnis & Karir</option>
+                            <option value="Pengembangan Diri">🧠 Pengembangan Diri</option>
+                            <option value="Umum">📚 Umum</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="videoDuration">Perkiraan Durasi (opsional)</label>
+                        <input type="text" id="videoDuration" placeholder="Contoh: 15 menit, 2 jam">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoNotes">Catatan / Ringkasan Materi (opsional)</label>
+                    <textarea id="videoNotes" rows="3" placeholder="Tuliskan poin penting atau rangkuman materi dari video ini..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelAdd" class="btn btn-secondary">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-bookmark"></i> Simpan ke Direktori
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Player Iframe YouTube -->
+    <div id="playerModal" class="modal-backdrop hidden">
+        <div class="modal-card modal-player">
+            <div class="modal-header">
+                <div class="player-title-info">
+                    <span id="playerCategoryBadge" class="badge-cat">Kategori</span>
+                    <h3 id="playerVideoTitle">Judul Video YouTube</h3>
+                </div>
+                <button class="btn-close-modal" id="btnClosePlayerModal">&times;</button>
+            </div>
+            <div class="player-iframe-container">
+                <iframe id="youtubeIframe" src="" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div class="player-footer">
+                <div class="player-notes-box">
+                    <strong><i class="fa-solid fa-note-sticky"></i> Catatan Belajar:</strong>
+                    <p id="playerNotesText">Tidak ada catatan untuk video ini.</p>
+                </div>
+                <div class="player-actions">
+                    <button id="btnPlayerToggleStatus" class="btn btn-outline-status">
+                        <i class="fa-regular fa-circle-check"></i>
+                        <span>Tandai Selesai</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Video -->
+    <div id="editModal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-pen-to-square modal-icon"></i>
+                    <h3>Edit Detail Video</h3>
+                </div>
+                <button class="btn-close-modal" id="btnCloseEditModal">&times;</button>
+            </div>
+            <form id="editVideoForm" class="modal-body">
+                <input type="hidden" id="editVideoId">
+                <div class="form-group">
+                    <label for="editVideoTitle">Judul Video <span class="required">*</span></label>
+                    <input type="text" id="editVideoTitle" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="editVideoCategory">Kategori Materi</label>
+                        <select id="editVideoCategory" required>
+                            <option value="Pemrograman">💻 Pemrograman & Tech</option>
+                            <option value="Matematika & Sains">📐 Matematika & Sains</option>
+                            <option value="Bahasa">🇬🇧 Bahasa & Komunikasi</option>
+                            <option value="Desain & Kreatif">🎨 Desain & Kreatif</option>
+                            <option value="Bisnis & Karir">💼 Bisnis & Karir</option>
+                            <option value="Pengembangan Diri">🧠 Pengembangan Diri</option>
+                            <option value="Umum">📚 Umum</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="editVideoDuration">Perkiraan Durasi</label>
+                        <input type="text" id="editVideoDuration">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editVideoNotes">Catatan / Ringkasan Materi</label>
+                    <textarea id="editVideoNotes" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelEdit" class="btn btn-secondary">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 <strong>baimstore</strong> — Direktori & Portal Belajar Video Edukasi. Integrated with YouTube oEmbed & LocalStorage.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
