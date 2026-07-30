@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Hitung Mundur (Countdown Timer) Pro</title>
+  <meta name="description" content="Aplikasi hitung mundur interaktif modern dengan JavaScript dan desain futuristik.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d0f17;
+      --card-bg: rgba(23, 27, 44, 0.75);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 50%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Countdown Display */
+    .timer-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem 1.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px var(--primary-glow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--primary), var(--accent-pink));
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 640px) {
+      .countdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .time-unit {
+      background: rgba(15, 18, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .time-unit:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .time-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .time-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-top: 0.75rem;
+    }
+
+    /* Target Event Name */
+    .event-title-display {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 0.5rem;
+    }
+
+    .target-date-display {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Control Panel */
+    .controls-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(15, 18, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    .presets-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preset-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      color: white;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Finished Notification */
+    .finished-banner {
+      display: none;
+      padding: 1rem;
+      border-radius: 12px;
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid var(--accent-pink);
+      color: #f472b6;
+      font-weight: 700;
+      font-size: 1.2rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Hitung Mundur Waktu</h1>
+      <p class="subtitle">Aplikasi Timer & Countdown Interaktif JavaScript</p>
+    </header>
+
+    <!-- Main Display -->
+    <div class="timer-card">
+      <div id="eventTitle" class="event-title-display">Tahun Baru 2027</div>
+      <div id="targetDateStr" class="target-date-display">1 Januari 2027, 00:00:00</div>
+
+      <div class="countdown-grid">
+        <div class="time-unit">
+          <span id="days" class="time-val">00</span>
+          <span class="time-label">Hari</span>
+        </div>
+        <div class="time-unit">
+          <span id="hours" class="time-val">00</span>
+          <span class="time-label">Jam</span>
+        </div>
+        <div class="time-unit">
+          <span id="minutes" class="time-val">00</span>
+          <span class="time-label">Menit</span>
+        </div>
+        <div class="time-unit">
+          <span id="seconds" class="time-val">00</span>
+          <span class="time-label">Detik</span>
+        </div>
+      </div>
+
+      <div id="finishedBanner" class="finished-banner">
+        🎉 Waktu Telah Tiba! Event Dimulai! 🎉
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-card">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="inputTitle">Nama Acara / Event</label>
+          <input type="text" id="inputTitle" value="Tahun Baru 2027" placeholder="Misal: Ulang Tahun, Peluncuran Web">
+        </div>
+        <div class="form-group">
+          <label for="inputDatetime">Pilih Tanggal & Waktu Target</label>
+          <input type="datetime-local" id="inputDatetime">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Preset Cepat</label>
+        <div class="presets-row">
+          <button class="preset-btn" onclick="setPresetTimer(1)">+1 Menit</button>
+          <button class="preset-btn" onclick="setPresetTimer(5)">+5 Menit</button>
+          <button class="preset-btn" onclick="setPresetTimer(60)">+1 Jam</button>
+          <button class="preset-btn" onclick="setPresetNewYear()">Tahun Baru</button>
+        </div>
+      </div>
+
+      <div class="action-btns">
+        <button id="btnStart" class="btn btn-primary" onclick="applyCustomCountdown()">Mulai Hitung Mundur</button>
+        <button id="btnTogglePause" class="btn btn-secondary" onclick="togglePause()">Jeda / Lanjut</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Logic Hitung Mundur JavaScript Modern
+     */
+    class CountdownTimer {
+      constructor(targetDate, onTick, onComplete) {
+        this.targetDate = new Date(targetDate).getTime();
+        this.onTick = onTick;
+        this.onComplete = onComplete;
+        this.timerId = null;
+        this.isPaused = false;
+      }
+
+      start() {
+        this.stop();
+        this.isPaused = false;
+        
+        const update = () => {
+          if (this.isPaused) return;
+
+          const now = new Date().getTime();
+          const distance = this.targetDate - now;
+
+          if (distance <= 0) {
+            this.stop();
+            this.onTick({ days: 0, hours: 0, minutes: 0, seconds: 0, distance: 0 });
+            if (typeof this.onComplete === 'function') {
+              this.onComplete();
+            }
+            return;
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          this.onTick({ days, hours, minutes, seconds, distance });
+        };
+
+        update();
+        this.timerId = setInterval(update, 1000);
+      }
+
+      pause() {
+        this.isPaused = true;
+      }
+
+      resume() {
+        this.isPaused = false;
+      }
+
+      stop() {
+        if (this.timerId) {
+          clearInterval(this.timerId);
+          this.timerId = null;
+        }
+      }
+    }
+
+    // Elements & Global Instance
+    let activeTimer = null;
+    let isPausedState = false;
+
+    const elDays = document.getElementById('days');
+    const elHours = document.getElementById('hours');
+    const elMinutes = document.getElementById('minutes');
+    const elSeconds = document.getElementById('seconds');
+    const elTitle = document.getElementById('eventTitle');
+    const elDateStr = document.getElementById('targetDateStr');
+    const elBanner = document.getElementById('finishedBanner');
+    const inputTitle = document.getElementById('inputTitle');
+    const inputDatetime = document.getElementById('inputDatetime');
+    const btnTogglePause = document.getElementById('btnTogglePause');
+
+    const pad = (num) => String(num).padStart(2, '0');
+
+    function startTimerWithDate(targetDate, title) {
+      elTitle.textContent = title;
+      elBanner.style.display = 'none';
+      
+      const dateObj = new Date(targetDate);
+      elDateStr.textContent = dateObj.toLocaleString('id-ID', {
+        dateStyle: 'full',
+        timeStyle: 'medium'
+      });
+
+      if (activeTimer) {
+        activeTimer.stop();
+      }
+
+      activeTimer = new CountdownTimer(
+        targetDate,
+        (time) => {
+          elDays.textContent = pad(time.days);
+          elHours.textContent = pad(time.hours);
+          elMinutes.textContent = pad(time.minutes);
+          elSeconds.textContent = pad(time.seconds);
+        },
+        () => {
+          elBanner.style.display = 'block';
+        }
+      );
+
+      activeTimer.start();
+      isPausedState = false;
+      btnTogglePause.textContent = "Jeda";
+    }
+
+    function applyCustomCountdown() {
+      const val = inputDatetime.value;
+      const title = inputTitle.value.trim() || "Acara Khusus";
+
+      if (!val) {
+        alert("Silakan pilih tanggal dan waktu target terlebih dahulu.");
+        return;
+      }
+
+      startTimerWithDate(val, title);
+    }
+
+    function setPresetTimer(minutesToAdd) {
+      const target = new Date(Date.now() + minutesToAdd * 60 * 1000);
+      const isoLocal = new Date(target.getTime() - (target.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      inputDatetime.value = isoLocal;
+      inputTitle.value = `Timer ${minutesToAdd} Menit`;
+      startTimerWithDate(target, inputTitle.value);
+    }
+
+    function setPresetNewYear() {
+      const nextYear = new Date().getFullYear() + 1;
+      const target = new Date(`January 1, ${nextYear} 00:00:00`);
+      const isoLocal = new Date(target.getTime() - (target.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      inputDatetime.value = isoLocal;
+      inputTitle.value = `Tahun Baru ${nextYear}`;
+      startTimerWithDate(target, inputTitle.value);
+    }
+
+    function togglePause() {
+      if (!activeTimer) return;
+      if (isPausedState) {
+        activeTimer.resume();
+        btnTogglePause.textContent = "Jeda";
+        isPausedState = false;
+      } else {
+        activeTimer.pause();
+        btnTogglePause.textContent = "Lanjut";
+        isPausedState = true;
+      }
+    }
+
+    setPresetNewYear();
+  </script>
+</body>
+</html>
