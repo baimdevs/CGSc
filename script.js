@@ -7,12 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 1. Initial State & Sample Data Definition
     // ==========================================
-    const STORAGE_KEY = 'baimstore_videos';
+    const STORAGE_KEY = 'baimstore_videos_v2';
     const THEME_KEY = 'baimstore_theme';
 
     const defaultVideos = [
+        // --- PEMROGRAMAN ---
         {
-            id: 'vid_default_1',
+            id: 'vid_prog_1',
             ytId: 'W6NZfCO5SIk',
             url: 'https://www.youtube.com/watch?v=W6NZfCO5SIk',
             title: 'JavaScript Tutorial for Beginners: Learn JavaScript in 1 Hour',
@@ -20,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbnail: 'https://img.youtube.com/vi/W6NZfCO5SIk/hqdefault.jpg',
             category: 'Pemrograman',
             duration: '1 Jam',
-            notes: 'Panduan fundamental JavaScript modern: variabel, fungsi, objek, array, dan control flow dasar.',
+            notes: 'Panduan fundamental JavaScript modern: variabel, fungsi, objek, array, dan DOM manipulation dasar.',
             completed: true,
-            createdAt: Date.now() - 86400000 * 5
+            createdAt: Date.now() - 86400000 * 18
         },
         {
-            id: 'vid_default_2',
+            id: 'vid_prog_2',
             ytId: '_uQrJ0TkZlc',
             url: 'https://www.youtube.com/watch?v=_uQrJ0TkZlc',
             title: 'Python Tutorial for Beginners - Full Course',
@@ -33,38 +34,159 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbnail: 'https://img.youtube.com/vi/_uQrJ0TkZlc/hqdefault.jpg',
             category: 'Pemrograman',
             duration: '6 Jam',
-            notes: 'Mempelajari dasar pemrograman Python dari konsep variabel hingga pembuatan mini proyek komprehensif.',
+            notes: 'Mempelajari dasar pemrograman Python dari variabel, struktur data, fungsi hingga pembuatan proyek nyata.',
             completed: false,
-            createdAt: Date.now() - 86400000 * 4
+            createdAt: Date.now() - 86400000 * 17
         },
         {
-            id: 'vid_default_3',
+            id: 'vid_prog_3',
+            ytId: 'NBZ9Ro6UKV8',
+            url: 'https://www.youtube.com/watch?v=NBZ9Ro6UKV8',
+            title: 'HTML & CSS Dasar untuk Pemula - Web Development',
+            author: 'Web Programming Unpas',
+            thumbnail: 'https://img.youtube.com/vi/NBZ9Ro6UKV8/hqdefault.jpg',
+            category: 'Pemrograman',
+            duration: '35 Menit',
+            notes: 'Pengenalan struktur tag HTML5 dan teknik styling CSS3 untuk membangun tata letak situs web modern.',
+            completed: true,
+            createdAt: Date.now() - 86400000 * 16
+        },
+        {
+            id: 'vid_prog_4',
+            ytId: 'lTMZuM0fCh4',
+            url: 'https://www.youtube.com/watch?v=lTMZuM0fCh4',
+            title: 'Git & GitHub Tutorial Lengkap untuk Pemula',
+            author: 'Web Programming Unpas',
+            thumbnail: 'https://img.youtube.com/vi/lTMZuM0fCh4/hqdefault.jpg',
+            category: 'Pemrograman',
+            duration: '45 Menit',
+            notes: 'Panduan kontrol versi dengan Git: commit, branching, merging, push, dan kolaborasi repositori di GitHub.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 15
+        },
+        {
+            id: 'vid_prog_5',
+            ytId: 'bMknfKXIFA8',
+            url: 'https://www.youtube.com/watch?v=bMknfKXIFA8',
+            title: 'React JS Tutorial for Beginners',
+            author: 'Programming with Mosh',
+            thumbnail: 'https://img.youtube.com/vi/bMknfKXIFA8/hqdefault.jpg',
+            category: 'Pemrograman',
+            duration: '2 Jam',
+            notes: 'Konsep dasar React JS: Component, JSX, Props, State, Hooks (useState, useEffect), dan struktur aplikasi web.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 14
+        },
+        {
+            id: 'vid_prog_6',
+            ytId: '8hly31xKLI0',
+            url: 'https://www.youtube.com/watch?v=8hly31xKLI0',
+            title: 'Struktur Data dan Algoritma Dasar',
+            author: 'freeCodeCamp',
+            thumbnail: 'https://img.youtube.com/vi/8hly31xKLI0/hqdefault.jpg',
+            category: 'Pemrograman',
+            duration: '5 Jam',
+            notes: 'Pemahaman Big O Notation, Array, Linked List, Stack, Queue, Hash Table, serta algoritma pencarian & pengurutan.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 13
+        },
+        {
+            id: 'vid_prog_7',
+            ytId: 'vLnPwxZdW4Y',
+            url: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y',
+            title: 'C++ Programming Course - Beginner to Advanced',
+            author: 'freeCodeCamp',
+            thumbnail: 'https://img.youtube.com/vi/vLnPwxZdW4Y/hqdefault.jpg',
+            category: 'Pemrograman',
+            duration: '4 Jam',
+            notes: 'Konsep dasar hingga lanjutan pemrograman C++: pointer, manajemen memori, OOP, dan manipulasi data.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 12
+        },
+
+        // --- MATEMATIKA & SAINS ---
+        {
+            id: 'vid_math_1',
             ytId: 'fNk_zzaMoSs',
             url: 'https://www.youtube.com/watch?v=fNk_zzaMoSs',
-            title: 'Vectors | Chapter 1, Essence of linear algebra',
+            title: 'Vectors | Chapter 1, Essence of Linear Algebra',
             author: '3Blue1Brown',
             thumbnail: 'https://img.youtube.com/vi/fNk_zzaMoSs/hqdefault.jpg',
             category: 'Matematika & Sains',
             duration: '10 Menit',
-            notes: 'Visualisasi matematika intuitif mengenai konsep vektor dalam aljabar linier.',
+            notes: 'Visualisasi matematika intuitif mengenai konsep dasar vektor, penjumlahan vektor, dan perkalian skalar.',
             completed: true,
-            createdAt: Date.now() - 86400000 * 3
+            createdAt: Date.now() - 86400000 * 11
         },
         {
-            id: 'vid_default_4',
-            ytId: 'cSKW4bC1gOc',
-            url: 'https://www.youtube.com/watch?v=cSKW4bC1gOc',
-            title: 'Figma UI/UX Design Essentials Course',
-            author: 'Bring Your Own Laptop',
-            thumbnail: 'https://img.youtube.com/vi/cSKW4bC1gOc/hqdefault.jpg',
-            category: 'Desain & Kreatif',
-            duration: '45 Menit',
-            notes: 'Teknik dasar desain antarmuka pengguna (UI/UX) menggunakan Figma, autolayout, dan komponen re-usable.',
+            id: 'vid_math_2',
+            ytId: 'WUvTyaaNkzM',
+            url: 'https://www.youtube.com/watch?v=WUvTyaaNkzM',
+            title: 'The Essence of Calculus | Chapter 1',
+            author: '3Blue1Brown',
+            thumbnail: 'https://img.youtube.com/vi/WUvTyaaNkzM/hqdefault.jpg',
+            category: 'Matematika & Sains',
+            duration: '17 Menit',
+            notes: 'Pendekatan geometri visual untuk memahami konsep turunan (derivative) dan integral dalam kalkulus.',
             completed: false,
-            createdAt: Date.now() - 86400000 * 2
+            createdAt: Date.now() - 86400000 * 10
         },
         {
-            id: 'vid_default_5',
+            id: 'vid_math_3',
+            ytId: 'PUB0TaZ7bhA',
+            url: 'https://www.youtube.com/watch?v=PUB0TaZ7bhA',
+            title: 'Trigonometri Dasar & Pengaplikasiannya',
+            author: 'Khan Academy',
+            thumbnail: 'https://img.youtube.com/vi/PUB0TaZ7bhA/hqdefault.jpg',
+            category: 'Matematika & Sains',
+            duration: '20 Menit',
+            notes: 'Memahami sinus, kosinus, tangen, teorema Pythagoras, dan rasio sudut pada segitiga siku-siku.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 9
+        },
+        {
+            id: 'vid_math_4',
+            ytId: 'kYB8IZa5AuE',
+            url: 'https://www.youtube.com/watch?v=kYB8IZa5AuE',
+            title: 'Matriks dan Transformasi Geometri Ruang',
+            author: '3Blue1Brown',
+            thumbnail: 'https://img.youtube.com/vi/kYB8IZa5AuE/hqdefault.jpg',
+            category: 'Matematika & Sains',
+            duration: '12 Menit',
+            notes: 'Bagaimana operasi matriks memetakan dan mentransformasikan koordinat dalam ruang aljabar linear.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 8
+        },
+        {
+            id: 'vid_math_5',
+            ytId: 'EefR8C3AIfE',
+            url: 'https://www.youtube.com/watch?v=EefR8C3AIfE',
+            title: 'Persamaan Kuadrat & Metode Penyelesaiannya',
+            author: 'Khan Academy',
+            thumbnail: 'https://img.youtube.com/vi/EefR8C3AIfE/hqdefault.jpg',
+            category: 'Matematika & Sains',
+            duration: '15 Menit',
+            notes: 'Memahami 3 metode penyelesaian persamaan kuadrat: pemfaktoran, melengkapkan kuadrat, dan rumus kuadratik.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 7
+        },
+        {
+            id: 'vid_math_6',
+            ytId: 'uhxtUt_-GyM',
+            url: 'https://www.youtube.com/watch?v=uhxtUt_-GyM',
+            title: 'Statistika Dasar: Mean, Median, Modus & Varians',
+            author: 'CrashCourse',
+            thumbnail: 'https://img.youtube.com/vi/uhxtUt_-GyM/hqdefault.jpg',
+            category: 'Matematika & Sains',
+            duration: '14 Menit',
+            notes: 'Konsep dasar analisis statistik: pemusatan data (mean, median, modus) serta pengukur dispersi data.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 6
+        },
+
+        // --- BAHASA INGGRIS & KOMUNIKASI ---
+        {
+            id: 'vid_lang_1',
             ytId: 'juK1T_hpxG0',
             url: 'https://www.youtube.com/watch?v=juK1T_hpxG0',
             title: 'How to Speak Fluent English: 5 Actionable Tips',
@@ -72,7 +194,59 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbnail: 'https://img.youtube.com/vi/juK1T_hpxG0/hqdefault.jpg',
             category: 'Bahasa',
             duration: '15 Menit',
-            notes: 'Strategi praktis meningkatkan kelancaran berbicara bahasa Inggris dan memperluas kosakata harian.',
+            notes: 'Strategi praktis meningkatkan kelancaran percakapan bahasa Inggris dan membangun kepercayaan diri.',
+            completed: true,
+            createdAt: Date.now() - 86400000 * 5
+        },
+        {
+            id: 'vid_lang_2',
+            ytId: 'rC7x0c_39sE',
+            url: 'https://www.youtube.com/watch?v=rC7x0c_39sE',
+            title: '100 Daily English Conversation Sentences for Beginners',
+            author: 'BBC Learning English',
+            thumbnail: 'https://img.youtube.com/vi/rC7x0c_39sE/hqdefault.jpg',
+            category: 'Bahasa',
+            duration: '25 Menit',
+            notes: 'Kumpulan 100 frasa & ungkapan umum dalam percakapan bahasa Inggris sehari-hari beserta intonasi yang tepat.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 4
+        },
+        {
+            id: 'vid_lang_3',
+            ytId: 'AEB60h7n5gU',
+            url: 'https://www.youtube.com/watch?v=AEB60h7n5gU',
+            title: 'English Grammar Rules: Present Simple vs Present Continuous',
+            author: 'English with Lucy',
+            thumbnail: 'https://img.youtube.com/vi/AEB60h7n5gU/hqdefault.jpg',
+            category: 'Bahasa',
+            duration: '12 Menit',
+            notes: 'Penjelasan komprehensif perbedaan tata bahasa antara Present Simple dan Present Continuous beserta contohnya.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 3
+        },
+        {
+            id: 'vid_lang_4',
+            ytId: 'sRFEV3R3Mto',
+            url: 'https://www.youtube.com/watch?v=sRFEV3R3Mto',
+            title: 'IELTS Speaking Test Tips & band 9 Answer Strategy',
+            author: 'IELTS Advantage',
+            thumbnail: 'https://img.youtube.com/vi/sRFEV3R3Mto/hqdefault.jpg',
+            category: 'Bahasa',
+            duration: '30 Menit',
+            notes: 'Panduan dan strategi menjawab pertanyaan ujian IELTS Speaking untuk memperoleh nilai band tinggi.',
+            completed: false,
+            createdAt: Date.now() - 86400000 * 2
+        },
+        {
+            id: 'vid_lang_5',
+            ytId: 'by6v42w35n0',
+            url: 'https://www.youtube.com/watch?v=by6v42w35n0',
+            title: 'Vocabulary Builder: 50 Advanced English Words',
+            author: 'English with Lucy',
+            thumbnail: 'https://img.youtube.com/vi/by6v42w35n0/hqdefault.jpg',
+            category: 'Bahasa',
+            duration: '20 Menit',
+            notes: 'Memperkaya kosakata bahasa Inggris tingkat lanjut (advanced) untuk konteks akademik dan komunikasi bisnis.',
             completed: false,
             createdAt: Date.now() - 86400000 * 1
         }
@@ -359,9 +533,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn-card-action" onclick="openEditModal('${vid.id}', event)" title="Edit Video">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button class="btn-card-action btn-delete" onclick="deleteVideo('${vid.id}', event)" title="Hapus Video">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -383,7 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 6. Video Actions (Add, Edit, Delete, Toggle)
+    // 6. Video Actions (Add, Edit, Toggle)
     // ==========================================
     addVideoForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -442,15 +613,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.deleteVideo = function(id, event) {
-        if (event) event.stopPropagation();
-        if (confirm('Apakah Anda yakin ingin menghapus video ini dari direktori?')) {
-            videos = videos.filter(v => v.id !== id);
-            saveVideos();
-            renderVideos();
-            showToast('Video telah dihapus', 'info');
-        }
-    };
 
     // Edit Video
     window.openEditModal = function(id, event) {
