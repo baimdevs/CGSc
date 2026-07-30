@@ -45,25 +45,11 @@
 
     <!-- Main Workspace -->
     <main class="main-container">
-        <!-- Hero / Stats Tracker Banner -->
+        <!-- Hero / Header Banner -->
         <section class="dashboard-hero">
             <div class="hero-content">
-                <h2>Kelola & Pelajari Video Edukasi Terbaik</h2>
-                <p>Simpan, kategorikan, dan pantau kemajuan belajar video YouTube edukasi Anda secara terorganisir.</p>
-                
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <span class="progress-title"><i class="fa-solid fa-chart-line"></i> Progres Belajar</span>
-                        <span id="progressPercent" class="progress-percent">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div id="progressBarFill" class="progress-bar-fill" style="width: 0%;"></div>
-                    </div>
-                    <div class="progress-stats">
-                        <span><strong id="statCompleted">0</strong> dari <strong id="statTotal">0</strong> Video Selesai</span>
-                        <span><i class="fa-solid fa-clock"></i> Simpan Permanen (LocalStorage)</span>
-                    </div>
-                </div>
+                <h2>Portal Direktori Video Edukasi & Filsafat</h2>
+                <p>Jelajahi ratusan video pembelajaran YouTube terverifikasi: Filsafat, Pemrograman, Sains, Psikologi, dan Sejarah.</p>
             </div>
         </section>
 
@@ -71,7 +57,7 @@
         <section class="controls-section">
             <div class="search-bar-wrapper">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Cari judul video, topik, atau catatan... (Tekan '/' untuk fokus)" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Cari judul video, topik filsafat, atau catatan... (Tekan '/' untuk fokus)" autocomplete="off">
                 <button id="btnClearSearch" class="btn-clear-search hidden" title="Hapus Pencarian">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -80,14 +66,15 @@
             <div class="filter-toolbar">
                 <div class="category-pills" id="categoryPills">
                     <button class="pill active" data-category="all">Semua Materi</button>
+                    <button class="pill" data-category="Filsafat">🏛️ Filsafat</button>
                     <button class="pill" data-category="Pemrograman">💻 Pemrograman</button>
                     <button class="pill" data-category="Matematika & Sains">📐 Sains & Math</button>
+                    <button class="pill" data-category="Psikologi">🧠 Psikologi</button>
+                    <button class="pill" data-category="Sejarah">📜 Sejarah</button>
                     <button class="pill" data-category="Bahasa">🇬🇧 Bahasa</button>
                     <button class="pill" data-category="Desain & Kreatif">🎨 Desain</button>
                     <button class="pill" data-category="Bisnis & Karir">💼 Bisnis</button>
-                    <button class="pill" data-category="Pengembangan Diri">🧠 Self Dev</button>
-                    <button class="pill pill-status" data-filter="uncompleted">⏳ Belum Selesai</button>
-                    <button class="pill pill-status" data-filter="completed">✅ Selesai</button>
+                    <button class="pill" data-category="Pengembangan Diri">🌱 Self Dev</button>
                 </div>
 
                 <div class="toolbar-actions">
@@ -179,12 +166,15 @@
                     <div class="form-group flex-1">
                         <label for="videoCategory">Kategori Materi <span class="required">*</span></label>
                         <select id="videoCategory" required>
+                            <option value="Filsafat">🏛️ Filsafat & Pemikiran</option>
                             <option value="Pemrograman">💻 Pemrograman & Tech</option>
                             <option value="Matematika & Sains">📐 Matematika & Sains</option>
+                            <option value="Psikologi">🧠 Psikologi & Perilaku</option>
+                            <option value="Sejarah">📜 Sejarah & Peradaban</option>
                             <option value="Bahasa">🇬🇧 Bahasa & Komunikasi</option>
                             <option value="Desain & Kreatif">🎨 Desain & Kreatif</option>
                             <option value="Bisnis & Karir">💼 Bisnis & Karir</option>
-                            <option value="Pengembangan Diri">🧠 Pengembangan Diri</option>
+                            <option value="Pengembangan Diri">🌱 Pengembangan Diri</option>
                             <option value="Umum">📚 Umum</option>
                         </select>
                     </div>
@@ -261,12 +251,15 @@
                     <div class="form-group flex-1">
                         <label for="editVideoCategory">Kategori Materi</label>
                         <select id="editVideoCategory" required>
+                            <option value="Filsafat">🏛️ Filsafat & Pemikiran</option>
                             <option value="Pemrograman">💻 Pemrograman & Tech</option>
                             <option value="Matematika & Sains">📐 Matematika & Sains</option>
+                            <option value="Psikologi">🧠 Psikologi & Perilaku</option>
+                            <option value="Sejarah">📜 Sejarah & Peradaban</option>
                             <option value="Bahasa">🇬🇧 Bahasa & Komunikasi</option>
                             <option value="Desain & Kreatif">🎨 Desain & Kreatif</option>
                             <option value="Bisnis & Karir">💼 Bisnis & Karir</option>
-                            <option value="Pengembangan Diri">🧠 Pengembangan Diri</option>
+                            <option value="Pengembangan Diri">🌱 Pengembangan Diri</option>
                             <option value="Umum">📚 Umum</option>
                         </select>
                     </div>
