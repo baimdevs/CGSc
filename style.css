@@ -1060,6 +1060,33 @@ a {
 
 }
 
+.player-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.btn-youtube {
+    background: #ff0000;
+    color: #ffffff !important;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition-fast);
+    text-decoration: none;
+    border: none;
+}
+
+.btn-youtube:hover {
+    background: #cc0000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
 .btn-outline-status {
     background: transparent;
     border: 1px solid var(--border-color);
@@ -1080,6 +1107,16 @@ a {
     background: var(--accent-green);
     color: #ffffff;
     border-color: var(--accent-green);
+}
+
+.btn-card-action.btn-yt-link:hover {
+    background: rgba(255, 0, 0, 0.15);
+    color: #ff0000;
+}
+
+.btn-card-action.btn-delete:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--accent-rose);
 }
 
 /* Toast Notifications */
